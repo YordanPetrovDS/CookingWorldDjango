@@ -1,43 +1,18 @@
-from cooking_world.accounts.models import Gender, Profile
 from datetime import date
 
-# from cooking_world.main.forms import CURRENT_DATE
+from cooking_world.accounts.models import AppUser, Gender, Profile
 from cooking_world.common.helpers import BootstrapFormMixin
 from cooking_world.common.validators import MaxDateValidator, validate_username
 from django import forms
-
-# from cooking_world.main.models import PetPhoto
 from django.contrib.auth import forms as auth_forms
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, login, logout
 from django.core.validators import MinLengthValidator
+
+MIN_DATE_OF_BIRTH = str(date(1920, 1, 1))
+MAX_DATE_OF_BIRTH = str(date.today())
 
 
 class CreateProfileForm(BootstrapFormMixin, auth_forms.UserCreationForm):
-    MIN_DATE_OF_BIRTH = date(1920, 1, 1)
-    MAX_DATE_OF_BIRTH = date.today()
-    
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self._init_bootstrap_form_controls()
-
-    def save(self, commit=True):
-        user = super().save(commit=commit)
-        profile = Profile(
-            first_name=self.cleaned_data["first_name"],
-            last_name=self.cleaned_data["last_name"],
-            username=self.cleaned_data["username"],
-            gender=self.cleaned_data["gender"],
-            email=self.cleaned_data["email"],
-            picture=self.cleaned_data["picture"],
-            date_of_birth=self.cleaned_data["date_of_birth"],
-            description=self.cleaned_data["description"],
-            user=user,
-        )
-
-        if commit:
-            profile.save()
-        return user
-
     username = forms.CharField(
         validators=[
             MinLengthValidator(Profile.USERNAME_MIN_LEN),
@@ -53,23 +28,24 @@ class CreateProfileForm(BootstrapFormMixin, auth_forms.UserCreationForm):
         max_length=Profile.LAST_NAME_MAX_LENGTH,
     )
 
-    gender = forms.ChoiceField(
-        choices=Gender.choices(),
-    )
-
     email = forms.EmailField()
 
-    picture = forms.URLField()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._init_bootstrap_form_controls()
 
-    date_of_birth = forms.DateField()
-
-    description = forms.CharField(
-        widget=forms.Textarea,
-    )
-
-    def clean_date_of_birth(self):
-        MaxDateValidator(CreateProfileForm.MAX_DATE_OF_BIRTH)(self.cleaned_data["date_of_birth"])
-        return self.cleaned_data["date_of_birth"]
+    def save(self, commit=True):
+        user = super().save(commit=commit)
+        profile = Profile(
+            first_name=self.cleaned_data["first_name"],
+            last_name=self.cleaned_data["last_name"],
+            username=self.cleaned_data["username"],
+            email=self.cleaned_data["email"],
+            user=user,
+        )
+        if commit:
+            profile.save()
+        return user
 
     class Meta:
         model = get_user_model()
@@ -79,8 +55,7 @@ class CreateProfileForm(BootstrapFormMixin, auth_forms.UserCreationForm):
             "password2",
             "first_name",
             "last_name",
-            "picture",
-            "description",
+            "email",
         )
         widgets = {
             "first_name": forms.TextInput(
@@ -93,9 +68,18 @@ class CreateProfileForm(BootstrapFormMixin, auth_forms.UserCreationForm):
                     "placeholder": "Enter last name",
                 }
             ),
-            "picture": forms.TextInput(
+            "password1": forms.PasswordInput(
                 attrs={
-                    "placeholder": "Enter URL",
+                    "placeholder": "Password",
+                    "data-toggle": "password",
+                    "id": "password",
+                }
+            ),
+            "password2": forms.PasswordInput(
+                attrs={
+                    "placeholder": "Confirm Password",
+                    "data-toggle": "password",
+                    "id": "password",
                 }
             ),
         }
@@ -105,48 +89,51 @@ class EditProfileForm(BootstrapFormMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._init_bootstrap_form_controls()
-        self.initial["gender"] = Profile.DO_NOT_SHOW
+        self.initial["gender"] = Gender.DO_NOT_SHOW
 
     class Meta:
         model = Profile
-        fields = "__all__"
+        exclude = (
+            "email",
+            "user",
+        )
 
         widgets = {
             "first_name": forms.TextInput(
                 attrs={
+                    "label": "First Name",
                     "placeholder": "Enter first name",
                 }
             ),
             "last_name": forms.TextInput(
                 attrs={
+                    "label": "Last Name",
                     "placeholder": "Enter last name",
                 }
             ),
             "username": forms.TextInput(
                 attrs={
+                    "label": "Username",
                     "placeholder": "Enter username",
-                }
-            ),
-            "picture": forms.TextInput(
-                attrs={
-                    "placeholder": "Enter URL",
                 }
             ),
             "email": forms.EmailInput(
                 attrs={
+                    "label": "Email",
                     "placeholder": "Enter email",
                 }
             ),
-            "description": forms.Textarea(
+            "picture": forms.TextInput(
                 attrs={
-                    "placeholder": "Enter description",
-                    "rows": 3,
+                    "label": "Avatar",
+                    "placeholder": "Enter URL",
                 }
             ),
             "date_of_birth": forms.DateInput(
                 attrs={
-                    "min": CreateProfileForm.MIN_DATE_OF_BIRTH,
-                    "max": CreateProfileForm.MAX_DATE_OF_BIRTH,
+                    "label": "Date of Birth",
+                    "min": MIN_DATE_OF_BIRTH,
+                    "max": MAX_DATE_OF_BIRTH,
                     "type": "date",
                 }
             ),
@@ -155,12 +142,8 @@ class EditProfileForm(BootstrapFormMixin, forms.ModelForm):
 
 class DeleteProfileForm(forms.ModelForm):
     def save(self, commit=True):
-        # Not good
-        # should be done with signals
-        # because this breaks the abstraction of the auth app
-        # pets = list(self.instance.pet_set.all())
-        # PetPhoto.objects.filter(tagged_pets__in=pets).delete()
-        self.instance.delete()
+        if commit:
+            self.instance.delete()
         return self.instance
 
     class Meta:
@@ -168,3 +151,35 @@ class DeleteProfileForm(forms.ModelForm):
         fields = ()
 
 
+class LoginUserForm(auth_forms.AuthenticationForm):
+    username = forms.EmailField(
+        widget=forms.EmailInput(
+            attrs={
+                "placeholder": "Email",
+                "class": "form-control",
+            }
+        ),
+    )
+
+    password = forms.CharField(
+        required=True,
+        widget=forms.PasswordInput(
+            attrs={
+                "placeholder": "Password",
+                "class": "form-control",
+                "data-toggle": "password",
+                "id": "password",
+                "name": "password",
+            }
+        ),
+    )
+
+    remember_me = forms.BooleanField(required=False)
+
+    class Meta:
+        model = AppUser
+        fields = [
+            "username",
+            "password",
+            "remember_me",
+        ]

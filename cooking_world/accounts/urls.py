@@ -1,25 +1,32 @@
-from django.urls import path, reverse_lazy
-from django.views.generic import RedirectView
-
+from cooking_world.accounts.views import (
+    ChangePasswordUserView,
+    DeleteProfileView,
+    DetailsProfileView,
+    EditProfileView,
+    LoginUserView,
+    LogoutUserView,
+    RegisterUserView,
+)
+from django.urls import path
 
 urlpatterns = (
-    # path("login/", UserLoginView.as_view(), name="login user"),
-    # path(
-    #     "edit-password/",
-    #     ChangeUserPasswordView.as_view(),
-    #     name="change password",
-    # ),
-    # path(
-    #     "profile/<int:pk>/",
-    #     ProfileDetailsView.as_view(),
-    #     name="profile details",
-    # ),
-    # path("create-profile/", UserRegisterView.as_view(), name="register"),
-    # path(
-    #     "password_change_done/",
-    #     RedirectView.as_view(url=reverse_lazy("dashboard")),
-    #     name="password_change_done",
-    # ),
-    # path("profile/edit/", edit_profile, name="edit profile"),
-    # path("profile/delete/", delete_profile, name="delete profile"),
+    path("login/", LoginUserView.as_view(), name="login"),
+    path("logout/", LogoutUserView.as_view(), name="logout"),
+    path("register/", RegisterUserView.as_view(), name="register"),
+    path("<int:pk>/", DetailsProfileView.as_view(), name="profile details"),
+    path(
+        "profile/<int:pk>/edit/",
+        EditProfileView.as_view(),
+        name="edit profile",
+    ),
+    path(
+        "profile/<int:pk>/delete/",
+        DeleteProfileView.as_view(),
+        name="delete profile",
+    ),
+    path(
+        "password-change/",
+        ChangePasswordUserView.as_view(),
+        name="password change",
+    ),
 )

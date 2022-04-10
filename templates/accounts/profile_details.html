@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block page_content %}
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <div class="w3-container w3-left">
+        <h1 class="w3-animate-left">Profile Details</h1>
+        {% if profile.picture %}
+            <h5 class="w3-animate-left">
+                <img class="rounded-circle account-img"
+                     src="{{ profile.picture }} "
+                     style="cursor: pointer;"/>
+            </h5>
+        {% endif %}
+        <h5 class="w3-animate-left">Name: {{ profile.get_full_name }}</h5>
+        {% if profile.date_of_birth %}
+            <h5 class="w3-animate-left">Age: {{ profile.age }}</h5>
+        {% endif %}
+        {% if profile.gender %}
+            <h5 class="w3-animate-left">Gender: {{ profile.gender }}</h5>
+        {% endif %}
+        {% if profile.email %}
+            <h5 class="w3-animate-left">Email: {{ profile.email }}</h5>
+        {% endif %}
+        <a href="{% url 'edit profile' request.user.id %}"
+           class="btn btn-primary">Edit</a>
+        <a href="{% url 'delete profile' request.user.id %}"
+           class="btn btn-danger">Delete</a>
+    </div>
+{% endblock %}

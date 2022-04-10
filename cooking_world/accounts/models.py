@@ -80,7 +80,7 @@ class Profile(models.Model):
         choices=Gender.choices(),
         null=True,
         blank=True,
-        default=Gender.DO_NOT_SHOW,
+        default=Gender.DO_NOT_SHOW.value,
     )
 
     date_of_birth = models.DateField(
@@ -88,17 +88,9 @@ class Profile(models.Model):
         blank=True,
     )
 
-    email = models.EmailField(
-        null=True,
-        blank=True,
-    )
+    email = models.EmailField()
 
     picture = models.URLField(
-        null=True,
-        blank=True,
-    )
-
-    description = models.TextField(
         null=True,
         blank=True,
     )

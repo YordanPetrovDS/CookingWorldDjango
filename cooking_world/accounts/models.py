@@ -1,7 +1,7 @@
 import datetime
-from enum import Enum
 
 from cooking_world.accounts.managers import AppUserManager
+from cooking_world.common.helpers import Gender
 from cooking_world.common.validators import (
     validate_only_letters,
     validate_username,
@@ -9,18 +9,6 @@ from cooking_world.common.validators import (
 from django.contrib.auth import models as auth_models
 from django.core.validators import MinLengthValidator
 from django.db import models
-
-
-class ChoicesMixin:
-    @classmethod
-    def choices(cls):
-        return [(x.name, x.value) for x in cls]
-
-
-class Gender(ChoicesMixin, Enum):
-    MALE = "Male"
-    FEMALE = "Female"
-    DO_NOT_SHOW = "Do not show"
 
 
 class AppUser(auth_models.AbstractBaseUser, auth_models.PermissionsMixin):

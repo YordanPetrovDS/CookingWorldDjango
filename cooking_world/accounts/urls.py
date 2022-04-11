@@ -30,3 +30,5 @@ urlpatterns = (
         name="password change",
     ),
 )
+
+# import cooking_world.accounts.signals

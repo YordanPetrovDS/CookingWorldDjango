@@ -2,10 +2,10 @@ from datetime import date
 
 from cooking_world.accounts.models import AppUser, Gender, Profile
 from cooking_world.common.helpers import BootstrapFormMixin
-from cooking_world.common.validators import MaxDateValidator, validate_username
+from cooking_world.common.validators import validate_username
 from django import forms
 from django.contrib.auth import forms as auth_forms
-from django.contrib.auth import get_user_model, login, logout
+from django.contrib.auth import get_user_model
 from django.core.validators import MinLengthValidator
 
 MIN_DATE_OF_BIRTH = str(date(1920, 1, 1))

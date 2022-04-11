@@ -30,7 +30,7 @@
                         <a href="#">Blogs</a>
                     </li>
                     <li>
-                        <a href="#">Contact</a>
+                        <a href="{% url 'contact' %}">Contact</a>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
@@ -55,7 +55,6 @@
         <div class="container">
             {% block page_content %}{% endblock %}
         </div>
-
         <footer class="text-center text-white fixed-bottom" style="background-color: #f1f1f1;">
             <!-- Grid container -->
             <div class="container pt-4">

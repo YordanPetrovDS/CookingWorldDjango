@@ -42,7 +42,7 @@ class Recipe(models.Model):
     COOKING_TIME_MIN_VALUE = 1
     SERVINGS_MIN_VALUE = 1
     DESCRIPTION_MAX_LENGTH = 3000
-    DESCRIPTION_MIN_LENGTH = 5
+    DESCRIPTION_MIN_LENGTH = 100
 
     title = models.CharField(
         max_length=TITLE_MAX_LENGTH,

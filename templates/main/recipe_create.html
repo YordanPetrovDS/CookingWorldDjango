@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block page_content %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'recipe.css' %}">
+    <form method="POST" action="{% url 'create recipe' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% if form.errors %}
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <div id="form_errors">
+                    {% for key, value in form.errors.items %}
+                        <strong>{{key}}:{{ value }}</strong>
+                    {% endfor %}
+                </div>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endif %}
+        <label>Title</label>
+        {{ form.title }}
+        <label>Image</label>
+        {{ form.photo }}
+        <hr>
+        <label>Cuisine</label>
+        {{ form.cuisine }}
+        <label>Meal Type</label>
+        {{ form.meal_type }}
+        <label>Dificulty</label>
+        {{ form.dificulty }}
+        <label>Preparation Time</label>
+        <p>
+            {{ form.preparation_time }}
+        </p>
+        <label>Cook Time</label>
+        <p>
+            {{ form.cooking_time }}
+        </p>
+        <label>Servings</label>
+        <p>
+            {{ form.servings }}
+        </p>
+        <hr>
+        <label>Description</label>
+        {{ form.description }}
+        <button type="submit" class="btn btn-success">
+            Submit Your Recipe
+        </button>
+    </form>
+{% endblock  %}

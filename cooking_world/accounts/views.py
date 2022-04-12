@@ -1,32 +1,16 @@
-from django.shortcuts import redirect
 from cooking_world.accounts.forms import (
     CreateProfileForm,
     DeleteProfileForm,
     EditProfileForm,
     LoginUserForm,
-    LoginUserForm,
 )
 from cooking_world.accounts.models import AppUser, Profile
 from cooking_world.common.view_mixins import RedirectToDashboard
+from django.contrib.auth import login
 from django.contrib.auth import mixins as auth_mixin
 from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
 from django.views import generic as views
-from django.contrib.auth.views import PasswordResetView
-from django.contrib.messages.views import SuccessMessageMixin
-from django.contrib.auth import login, logout
-
-# class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
-#     template_name = "accounts/password_reset.html"
-#     email_template_name = "accounts/password_reset_email.html"
-#     subject_template_name = "accounts/password_reset_subject"
-#     success_message = (
-#         "We've emailed you instructions for setting your password, "
-#         "if an account exists with the email you entered. You should receive them shortly."
-#         " If you don't receive an email, "
-#         "please make sure you've entered the address you registered with, and check your spam folder."
-#     )
-#     success_url = reverse_lazy("index")
 
 
 class RegisterUserView(RedirectToDashboard, views.CreateView):

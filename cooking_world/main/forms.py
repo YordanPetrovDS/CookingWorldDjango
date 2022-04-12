@@ -1,8 +1,8 @@
 from cooking_world.common.helpers import BootstrapFormMixin
-from cooking_world.common.validators import MaxDateValidator, validate_username
+from cooking_world.common.validators import validate_only_letters
+from cooking_world.main.models import Contact, Recipe
 from django import forms
-
-from cooking_world.main.models import Contact
+from django.core.validators import MinLengthValidator
 
 
 class ContactForm(BootstrapFormMixin, forms.ModelForm):
@@ -13,6 +13,7 @@ class ContactForm(BootstrapFormMixin, forms.ModelForm):
     title = forms.CharField(
         max_length=Contact.TITLE_MAX_LENGTH,
     )
+
     description = forms.CharField(
         max_length=Contact.DESCRIPTION_MAX_LENGTH,
     )
@@ -21,3 +22,40 @@ class ContactForm(BootstrapFormMixin, forms.ModelForm):
         model = Contact
         fields = "__all__"
 
+
+class CreateRecipeForm(forms.ModelForm):
+    def __init__(self, user, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.user = user
+
+    def save(self, commit=True):
+        recipe = super().save(commit=False)
+
+        recipe.user = self.user
+        if commit:
+            recipe.save()
+
+        return recipe
+
+    title = forms.CharField(
+        validators=[
+            MinLengthValidator(Recipe.TITLE_MIN_LENGTH),
+            validate_only_letters,
+        ],
+    )
+
+    preparation_time = forms.IntegerField(
+        min_value=1,
+    )
+
+    cooking_time = forms.IntegerField(
+        min_value=1,
+    )
+
+    servings = forms.IntegerField(
+        min_value=1,
+    )
+
+    class Meta:
+        model = Recipe
+        exclude = ("user",)

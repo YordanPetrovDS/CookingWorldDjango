@@ -10,6 +10,9 @@
                  width="400"
                  height="350"/>
         </h5>
+        <h5 class="w3-animate-left">
+            <b>Author:</b> <a href="{% url 'profile details' recipe.user_id %}">{{author.get_full_name}}</a>
+        </h5>
         <h5 class="w3-animate-left"><b>Title:</b> {{ recipe.title }}</h5>
         <h5 class="w3-animate-left"><b>Cuisine:</b> {{ recipe.cuisine }}</h5>
         <h5 class="w3-animate-left"><b>Meal Type:</b> {{ recipe.meal_type }}</h5>
@@ -31,7 +34,7 @@
         </h5>
         
         {% if is_owner %}
-            <a href="#" class="btn btn-primary">Edit</a>
+            <a href="{% url 'edit recipe' recipe.pk %}" class="btn btn-primary">Edit</a>
             <a href="{% url 'delete recipe' recipe.pk %}" class="btn btn-danger">Delete</a>
         {% endif %}
     </div>

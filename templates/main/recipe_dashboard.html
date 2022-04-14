@@ -32,10 +32,10 @@
                                 {{ recipe.description|truncatechars:30 }}
                             </p>
                             <p class="card-text">
-                                Author: <a href="{% url 'profile details' recipe.user_id %}">Yordan Petrov</a>
+                                Cuisine: {{ recipe.cuisine }}
                             </p>
                             <p class="card-text">
-                                Cuisine: {{ recipe.cuisine }}
+                                Time: {{ recipe.total_coooking_time }} min.
                             </p>
                             <a href="{% url 'recipe details' recipe.id %}"
                                class="btn btn-primary stretched-link">Details</a>

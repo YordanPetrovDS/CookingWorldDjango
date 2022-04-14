@@ -1,10 +1,7 @@
 from cooking_world.common.helpers import Cuisine, Dificulty, MealType
-from cooking_world.common.validators import (
-    MaxFileSizeInMbValidator,
-    validate_only_letters,
-)
+from cooking_world.common.validators import MaxFileSizeInMbValidator
 from django.contrib.auth import get_user_model
-from django.core.validators import MinValueValidator, MinLengthValidator
+from django.core.validators import MinLengthValidator, MinValueValidator
 from django.db import models
 
 UserModel = get_user_model()
@@ -20,7 +17,6 @@ class Contact(models.Model):
         max_length=TITLE_MAX_LENGTH,
         validators=[
             MinLengthValidator(TITLE_MIN_LENGTH),
-            validate_only_letters,
         ],
     )
 
@@ -48,7 +44,6 @@ class Recipe(models.Model):
         max_length=TITLE_MAX_LENGTH,
         validators=[
             MinLengthValidator(TITLE_MIN_LENGTH),
-            validate_only_letters,
         ],
     )
 
@@ -121,7 +116,6 @@ class Blog(models.Model):
         max_length=TITLE_MAX_LENGTH,
         validators=[
             MinLengthValidator(TITLE_MIN_LENGTH),
-            validate_only_letters,
         ],
     )
 

@@ -1,4 +1,5 @@
-from cooking_world.main.forms import CreateRecipeForm
+from cooking_world.accounts.models import Profile
+from cooking_world.main.forms import CreateRecipeForm, EditRecipeForm
 from cooking_world.main.models import Recipe
 from django.contrib.auth import mixins as auth_mixin
 from django.urls import reverse_lazy
@@ -23,9 +24,13 @@ class DashboardRecipeView(views.ListView):
     paginate_by = 6
 
 
-# class EditRecipeView(views.UpdateView):
-#     template_name = "main/recipe_edit.html"
-#     form_class = EditPetForm
+class EditRecipeView(auth_mixin.LoginRequiredMixin, views.UpdateView):
+    model = Recipe
+    form_class = EditRecipeForm
+    template_name = "main/recipe_edit.html"
+
+    def get_success_url(self):
+        return reverse_lazy("recipe details", kwargs={"pk": self.object.pk})
 
 
 class DeleteRecipeView(auth_mixin.LoginRequiredMixin, views.DeleteView):
@@ -42,5 +47,7 @@ class DetailsRecipeView(views.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        author = Profile.objects.get(pk=self.object.user_id)
+        context["author"] = author
         context["is_owner"] = self.object.user == self.request.user
         return context

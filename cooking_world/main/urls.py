@@ -4,6 +4,7 @@ from cooking_world.main.views.recipes import (
     DashboardRecipeView,
     DeleteRecipeView,
     DetailsRecipeView,
+    EditRecipeView,
 )
 from django.urls import path
 
@@ -17,9 +18,18 @@ urlpatterns = [
         name="dashboard recipes",
     ),
     path(
-        "recipes/<int:pk>/", DetailsRecipeView.as_view(), name="recipe details"
+        "recipes/<int:pk>/",
+        DetailsRecipeView.as_view(),
+        name="recipe details",
     ),
     path(
-        "recipes/<int:pk>/delete/", DeleteRecipeView.as_view(), name="delete recipe"
+        "recipes/<int:pk>/edit/",
+        EditRecipeView.as_view(),
+        name="edit recipe",
+    ),
+    path(
+        "recipes/<int:pk>/delete/",
+        DeleteRecipeView.as_view(),
+        name="delete recipe",
     ),
 ]

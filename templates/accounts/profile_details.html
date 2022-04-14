@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block page_content %}
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <div class="w3-container w3-left">
+    <div class="w3-container w3-center">
         <h1 class="w3-animate-left">Profile Details</h1>
         {% if profile.picture %}
             <h5 class="w3-animate-left">
@@ -10,19 +10,90 @@
                      style="cursor: pointer;"/>
             </h5>
         {% endif %}
-        <h5 class="w3-animate-left">Name: {{ profile.get_full_name }}</h5>
+        <h5 class="w3-animate-left">
+            Name:
+            <p>
+                {{ profile.get_full_name }}
+            </p>
+        </h5>
         {% if profile.date_of_birth %}
-            <h5 class="w3-animate-left">Age: {{ profile.age }}</h5>
+            <h5 class="w3-animate-left">
+                Age:
+                <p>
+                    {{ profile.age }}
+                </p>
+            </h5>
         {% endif %}
         {% if profile.gender %}
-            <h5 class="w3-animate-left">Gender: {{ profile.gender }}</h5>
+            <h5 class="w3-animate-left">
+                Gender:
+                <p>
+                    {{ profile.gender }}
+                </p>
+            </h5>
         {% endif %}
         {% if profile.email %}
-            <h5 class="w3-animate-left">Email: {{ profile.email }}</h5>
+            <h5 class="w3-animate-left">
+                Email:
+                <p>
+                    {{ profile.email }}
+                </p>
+            </h5>
         {% endif %}
-        <a href="{% url 'edit profile' request.user.id %}"
-           class="btn btn-primary">Edit</a>
-        <a href="{% url 'delete profile' request.user.id %}"
-           class="btn btn-danger">Delete</a>
+        {% if user.id == profile.user_id %}
+            <a href="{% url 'edit profile' request.user.id %}"
+               class="btn btn-primary">Edit</a>
+            <a href="{% url 'delete profile' request.user.id %}"
+               class="btn btn-danger">Delete</a>
+        {% endif %}
     </div>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <h1 class="text-center">
+        {% if recipes %}
+            All Recipes
+        {% else %}
+            No Recipes yet
+        {% endif %}
+    </h1>
+    {% if recipes %}
+        <div class="w3-container">
+            {% for recipe in recipes %}
+                <div class="card-deck border-primary mb-3">
+                    <div class="card w3-col s4 w3-row-padding"
+                         style="width:200px"
+                         alt="Lights">
+                        <a href="{% url 'recipe details' recipe.id %}">
+                            <img class="card-img-top img-fluid"
+                                 src="{{ recipe.photo.url }}"
+                                 alt="Card image"
+                                 style="width:100%"
+                                 alt="Forest"
+                                 width="200"
+                                 height="150">
+                        </a>
+                        <div class="card-body">
+                            <h4 class="card-title">
+                                <b>{{ recipe.title }}</b>
+                            </h4>
+                            <p class="card-text">
+                                {{ recipe.description|truncatechars:20 }}
+                            </p>
+                            <p class="card-text">
+                                Cuisine: {{ recipe.cuisine }}
+                            </p>
+                            <a href="{% url 'recipe details' recipe.id %}"
+                               class="btn btn-primary stretched-link">Details</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="w3-container w3-center">
+            <a href="{% url 'create recipe' %}"
+               class="btn btn-lg btn-secondary row align-self-baseline">
+                <button type="submit" class="btn btn-success">Add Recipe</button>
+            </a>
+        </div>
+    {% endif %}
 {% endblock %}

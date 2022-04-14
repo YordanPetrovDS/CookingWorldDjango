@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block page_content %}
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <div class="w3-container w3-center">
+        <h1 class="w3-animate-left">Recipe Details</h1>
+        <h5 class="w3-animate-left">
+            <img class="rounded-circle account-img card-img-top img-fluid"
+                 src="{{ recipe.photo.url }} "
+                 style="cursor: pointer;"
+                 width="400"
+                 height="350"/>
+        </h5>
+        <h5 class="w3-animate-left"><b>Title:</b> {{ recipe.title }}</h5>
+        <h5 class="w3-animate-left"><b>Cuisine:</b> {{ recipe.cuisine }}</h5>
+        <h5 class="w3-animate-left"><b>Meal Type:</b> {{ recipe.meal_type }}</h5>
+        <h5 class="w3-animate-left"><b>Dificulty:</b> {{ recipe.dificulty }}</h5>
+        <h5 class="w3-animate-left">
+            <b>Preparation Time:</b> {{ recipe.preparation_time }}  (min)
+        </h5>
+        <h5 class="w3-animate-left">
+            <b>Cook Time:</b> {{ recipe.cooking_time }}  (min)
+        </h5>
+        <h5 class="w3-animate-left">
+            <b>Total Coooking Time:</b> {{ recipe.total_coooking_time }} (min)
+        </h5>
+        <h5 class="w3-animate-left">
+            <b>Servings:</b> {{ recipe.servings }}
+        </h5>
+        <h5 class="w3-animate-left">
+            <b>Description:</b> {{ recipe.description }}
+        </h5>
+        
+        {% if is_owner %}
+            <a href="#" class="btn btn-primary">Edit</a>
+            <a href="{% url 'delete recipe' recipe.pk %}" class="btn btn-danger">Delete</a>
+        {% endif %}
+    </div>
+{% endblock page_content %}

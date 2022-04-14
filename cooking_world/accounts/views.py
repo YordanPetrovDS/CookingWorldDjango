@@ -12,6 +12,8 @@ from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
 from django.views import generic as views
 
+from cooking_world.main.models import Recipe
+
 
 class RegisterUserView(RedirectToDashboard, views.CreateView):
     form_class = CreateProfileForm
@@ -57,11 +59,10 @@ class DetailsProfileView(views.DetailView):
     model = Profile
     template_name = "accounts/profile_details.html"
     object_context_name = "profile"
-
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # self.object is a Profile
-        # pets = list(Pet.objects.filter(user_id=self.object.user_id))
+        recipes = list(Recipe.objects.filter(user_id=self.object.user_id))
         # pet_photos = PetPhoto.objects.filter(tagged_pets__in=pets).distinct()
 
         # total_likes_count = sum(pp.likes for pp in pet_photos)
@@ -72,7 +73,7 @@ class DetailsProfileView(views.DetailView):
                 # "total_likes_count": total_likes_count,
                 # "total_images_count": total_pet_photos_count,
                 "is_owner": self.object.user_id == self.request.user.id,
-                # "pets": pets,
+                "recipes": recipes,
             }
         )
 

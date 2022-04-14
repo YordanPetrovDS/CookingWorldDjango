@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block page_content %}
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <h1 class="text-center">
+        {% if recipes %}
+            All Recipes
+        {% else %}
+            No Recipes yet
+        {% endif %}
+    </h1>
+    {% if recipes %}
+        <div class="w3-container">
+            {% for recipe in recipes %}
+                <div class="card-deck border-primary mb-3">
+                    <div class="card w3-col s4 w3-row-padding"
+                         style="width:300px"
+                         alt="Lights">
+                        <a href="{% url 'recipe details' recipe.id %}">
+                            <img class="card-img-top img-fluid"
+                                 src="{{ recipe.photo.url }}"
+                                 alt="Card image"
+                                 style="width:100%"
+                                 alt="Forest"
+                                 width="330"
+                                 height="250">
+                        </a>
+                        <div class="card-body">
+                            <h4 class="card-title">
+                                <b>{{ recipe.title }}</b>
+                            </h4>
+                            <p class="card-text">
+                                {{ recipe.description|truncatechars:30 }}
+                            </p>
+                            <p class="card-text">
+                                Author: <a href="{% url 'profile details' recipe.user_id %}">Yordan Petrov</a>
+                            </p>
+                            <p class="card-text">
+                                Cuisine: {{ recipe.cuisine }}
+                            </p>
+                            <a href="{% url 'recipe details' recipe.id %}"
+                               class="btn btn-primary stretched-link">Details</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="{% url 'dashboard recipes' %}?page={{ page_obj.previous_page_number }}">Previous</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="True">Previous</a>
+                    </li>
+                {% endif %}
+                {% for i in page_obj.paginator.page_range %}
+                    {% if page_obj.number == i %}
+                        <li class="page-item active" aria-current="page">
+                            <span class="page-link">
+                                {{ i }}
+                                <span class="sr-only">(current)</span>
+                            </span>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="{% url 'dashboard recipes' %}?page={{ i }}">{{ i }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="{% url 'dashboard recipes' %}?page={{ page_obj.next_page_number }}">Next</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="True">Next</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% else %}
+        <div class="row d-flex justify-content-center align-content-center">
+            <a href="{% url 'create recipe' %}"
+               class="btn btn-lg btn-secondary row align-self-baseline">Add Recipe</a>
+        </div>
+    {% endif %}
+{% endblock %}

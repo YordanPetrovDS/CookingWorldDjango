@@ -14,22 +14,33 @@ class CreateRecipeView(auth_mixin.LoginRequiredMixin, views.CreateView):
         kwargs = super().get_form_kwargs()
         kwargs["user"] = self.request.user
         return kwargs
-    
+
+
+class DashboardRecipeView(views.ListView):
+    model = Recipe
+    template_name = "main/recipe_dashboard.html"
+    context_object_name = "recipes"
+    paginate_by = 6
+
+
 # class EditRecipeView(views.UpdateView):
 #     template_name = "main/recipe_edit.html"
 #     form_class = EditPetForm
 
 
-# class DeleteRecipeView(views.DeleteView):
-#     template_name = "main/recipe_delete.html"
-#     form_class = DeletePetForm
+class DeleteRecipeView(auth_mixin.LoginRequiredMixin, views.DeleteView):
+    model = Recipe
+    template_name = "main/recipe_delete.html"
+    success_url = reverse_lazy("dashboard recipes")
+    fields = ()
 
-# class DetailsRecipeView(auth_mixin.LoginRequiredMixin, views.DetailView):
-#     model = PetPhoto
-#     template_name = "main/photo_details.html"
-#     context_object_name = "pet_photo"
 
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context["is_owner"] = self.object.user == self.request.user
-#         return context
+class DetailsRecipeView(views.DetailView):
+    model = Recipe
+    template_name = "main/recipe_details.html"
+    context_object_name = "recipe"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["is_owner"] = self.object.user == self.request.user
+        return context

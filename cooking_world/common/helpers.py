@@ -6,7 +6,7 @@ from django.forms import ChoiceField
 class ChoicesMixin:
     @classmethod
     def choices(cls):
-        return [(x.name, x.value) for x in cls]
+        return [(x.value, x.value) for x in cls]
 
 
 class Gender(ChoicesMixin, Enum):

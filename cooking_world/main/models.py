@@ -55,12 +55,7 @@ class Recipe(models.Model):
     #     ],
     # )
 
-    photo = CloudinaryField(
-        "image",
-        validators=[
-            MaxFileSizeInMbValidator(IMAGE_MAX_SIZE_IN_MB),
-        ],
-    )
+    photo = CloudinaryField("image")
 
     cuisine = models.CharField(
         max_length=max(len(x) for x, _ in Cuisine.choices()),
@@ -134,12 +129,7 @@ class Blog(models.Model):
     #     ],
     # )
 
-    photo = CloudinaryField(
-        "image",
-        validators=[
-            MaxFileSizeInMbValidator(IMAGE_MAX_SIZE_IN_MB),
-        ],
-    )
+    photo = CloudinaryField("image")
 
     description = models.TextField(
         max_length=DESCRIPTION_MAX_LENGTH,

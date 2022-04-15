@@ -15,7 +15,7 @@ class HomeView(views.ListView):
         blogs = Blog.objects.all()
         context["blogs"] = blogs
         return context
-    
+
 
 class ContactView(views.CreateView):
     form_class = ContactForm

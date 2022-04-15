@@ -6,7 +6,7 @@ from cooking_world.accounts.models import AppUser, Profile
 # admin.site.register(AppUser)
 @admin.register(AppUser)
 class UserAdmin(UserAdmin):
-    list_display = ("email", "is_staff","is_superuser")
+    list_display = ("email", "is_staff", "is_superuser")
     list_filter = ("is_staff", "is_superuser", "groups")
     ordering = ("email",)
     fieldsets = (

@@ -80,9 +80,7 @@ class EditProfileView(views.UpdateView):
     template_name = "accounts/profile_edit.html"
 
     def get_success_url(self):
-        return reverse_lazy(
-            "profile details", kwargs={"pk": self.request.user.id}
-        )
+        return reverse_lazy("profile details", kwargs={"pk": self.request.user.id})
 
 
 class DeleteProfileView(views.DeleteView):

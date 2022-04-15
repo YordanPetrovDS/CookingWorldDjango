@@ -1,3 +1,4 @@
+from cloudinary.models import CloudinaryField
 from cooking_world.common.helpers import Cuisine, Dificulty, MealType
 from cooking_world.common.validators import MaxFileSizeInMbValidator
 from django.contrib.auth import get_user_model
@@ -47,8 +48,15 @@ class Recipe(models.Model):
         ],
     )
 
-    photo = models.ImageField(
-        upload_to=IMAGE_UPLOAD_TO_DIR,
+    # photo = models.ImageField(
+    #     upload_to=IMAGE_UPLOAD_TO_DIR,
+    #     validators=[
+    #         MaxFileSizeInMbValidator(IMAGE_MAX_SIZE_IN_MB),
+    #     ],
+    # )
+
+    photo = CloudinaryField(
+        "image",
         validators=[
             MaxFileSizeInMbValidator(IMAGE_MAX_SIZE_IN_MB),
         ],
@@ -119,8 +127,15 @@ class Blog(models.Model):
         ],
     )
 
-    photo = models.ImageField(
-        upload_to=IMAGE_UPLOAD_TO_DIR,
+    # photo = models.ImageField(
+    #     upload_to=IMAGE_UPLOAD_TO_DIR,
+    #     validators=[
+    #         MaxFileSizeInMbValidator(IMAGE_MAX_SIZE_IN_MB),
+    #     ],
+    # )
+
+    photo = CloudinaryField(
+        "image",
         validators=[
             MaxFileSizeInMbValidator(IMAGE_MAX_SIZE_IN_MB),
         ],

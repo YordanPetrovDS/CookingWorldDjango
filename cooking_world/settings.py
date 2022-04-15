@@ -1,8 +1,11 @@
 import os
 from pathlib import Path
 
+import cloudinary
 from decouple import config
 from dotenv import load_dotenv
+
+from cooking_world.utils import is_production, is_test
 
 load_dotenv()
 
@@ -34,7 +37,7 @@ PROJECT_APPS = (
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECT_APPS
 
 MIDDLEWARE = [
-    # "whitenoise.middleware.WhiteNoiseMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -76,23 +79,27 @@ DATABASES = {
     }
 }
 
-# SESSION_COOKIE_AGE = 60 * 60 * 24 * 30
+# SESSION_COOKIE_AGE = 30 * 60 * 24 * 30
 
 
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
-    },
-]
+AUTH_PASSWORD_VALIDATORS = []
+if is_production():
+    AUTH_PASSWORD_VALIDATORS.extend(
+        [
+            {
+                "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+            },
+            {
+                "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+            },
+            {
+                "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+            },
+            {
+                "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+            },
+        ]
+    )
 
 # Internationalization
 LANGUAGE_CODE = "en-us"
@@ -106,7 +113,7 @@ STATIC_URL = "/static/"
 
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (BASE_DIR / "static",)
-# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 MEDIA_ROOT = BASE_DIR / "media/"
 MEDIA_URL = "/media/"
@@ -115,3 +122,34 @@ MEDIA_URL = "/media/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "accounts.AppUser"
+LOGGING_LEVEL = "DEBUG"
+
+if is_production():
+    LOGGING_LEVEL = "INFO"
+elif is_test():
+    LOGGING_LEVEL = "CRITICAL"
+
+# LOGGING = {
+#     "version": 1,
+#     "handlers": {
+#         "console": {
+#             # DEBUG, WARNING, INFO, ERROR, CRITICAL,
+#             "level": LOGGING_LEVEL,
+#             "filters": [],
+#             "class": "logging.StreamHandler",
+#         }
+#     },
+#     "loggers": {
+#         "django.db.backends": {
+#             "level": LOGGING_LEVEL,
+#             "handlers": ["console"],
+#         }
+#     },
+# }
+
+
+cloudinary.config(
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME", None),
+    api_key=os.getenv("CLOUDINARY_API_KEY", None),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET", None),
+)

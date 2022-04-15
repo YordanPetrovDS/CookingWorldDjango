@@ -59,19 +59,13 @@ class DetailsProfileView(views.DetailView):
     model = Profile
     template_name = "accounts/profile_details.html"
     object_context_name = "profile"
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         recipes = list(Recipe.objects.filter(user_id=self.object.user_id))
-        # pet_photos = PetPhoto.objects.filter(tagged_pets__in=pets).distinct()
-
-        # total_likes_count = sum(pp.likes for pp in pet_photos)
-        # total_pet_photos_count = len(pet_photos)
 
         context.update(
             {
-                # "total_likes_count": total_likes_count,
-                # "total_images_count": total_pet_photos_count,
                 "is_owner": self.object.user_id == self.request.user.id,
                 "recipes": recipes,
             }
@@ -96,9 +90,3 @@ class DeleteProfileView(views.DeleteView):
     template_name = "accounts/profile_delete.html"
     form_class = DeleteProfileForm
     success_url = reverse_lazy("index")
-
-    def form_valid(self, form):
-        result = super().form_valid(form)
-        user = AppUser.objects.get(id=self.request.user.id)
-        user.delete()
-        return result

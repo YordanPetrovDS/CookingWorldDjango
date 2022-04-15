@@ -1,3 +1,10 @@
+from cooking_world.main.views.blogs import (
+    CreateBlogView,
+    DashboardBlogView,
+    DeleteBlogView,
+    DetailsBlogView,
+    EditBlogView,
+)
 from cooking_world.main.views.generic import ContactView, HomeView
 from cooking_world.main.views.recipes import (
     CreateRecipeView,
@@ -32,4 +39,19 @@ urlpatterns = [
         DeleteRecipeView.as_view(),
         name="delete recipe",
     ),
+    path("create-blog/", CreateBlogView.as_view(), name="create blog"),
+    path(
+        "dashboard-blogs/",
+        DashboardBlogView.as_view(),
+        name="dashboard blogs",
+    ),
+    path("blogs/<int:pk>/", DetailsBlogView.as_view(), name="blog details"),
+    path("blogs/<int:pk>/edit/", EditBlogView.as_view(), name="edit blog"),
+    path(
+        "blogs/<int:pk>/delete/",
+        DeleteBlogView.as_view(),
+        name="delete blog",
+    ),
 ]
+
+import cooking_world.main.signals

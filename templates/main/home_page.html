@@ -1,4 +1,121 @@
 {% extends 'base.html' %}
 {% block page_content %}
-<h1 class="page-title">Page Title</h1>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    {% if blogs %}
+        <h1 class="text-center">Recents Blogs</h1>
+        <div class="w3-container">
+            {% for blog in blogs %}
+                <div class="card-deck border-primary mb-3">
+                    <div class="card w3-col s4 w3-row-padding"
+                         style="width:300px"
+                         alt="Lights">
+                        <a href="{% url 'blog details' blog.id %}">
+                            <img class="card-img-top img-fluid"
+                                 src="{{ blog.photo.url }}"
+                                 alt="Card image"
+                                 style="width:100%"
+                                 alt="Forest"
+                                 width="330"
+                                 height="250">
+                        </a>
+                        <div class="card-body">
+                            <h4 class="card-title">
+                                <b>{{ blog.title }}</b>
+                            </h4>
+                            <p class="card-text">
+                                {{ blog.description|truncatechars:30 }}
+                            </p>
+                            <p class="card-text">
+                                Date: {{ blog.publication_date|date:"d.m.Y" }}
+                            </p>
+                            <a href="{% url 'blog details' blog.id %}"
+                               class="btn btn-primary stretched-link">Details</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <h1 class="text-center">
+        {% if recipes %}
+            All Recipes
+        {% else %}
+            No Recipes yet
+        {% endif %}
+    </h1>
+    {% if recipes %}
+        <div class="w3-container">
+            {% for recipe in recipes %}
+                <div class="card-deck border-primary mb-3">
+                    <div class="card w3-col s4 w3-row-padding"
+                         style="width:300px"
+                         alt="Lights">
+                        <a href="{% url 'recipe details' recipe.id %}">
+                            <img class="card-img-top img-fluid"
+                                 src="{{ recipe.photo.url }}"
+                                 alt="Card image"
+                                 style="width:100%"
+                                 alt="Forest"
+                                 width="330"
+                                 height="250">
+                        </a>
+                        <div class="card-body">
+                            <h4 class="card-title">
+                                <b>{{ recipe.title }}</b>
+                            </h4>
+                            <p class="card-text">
+                                {{ recipe.description|truncatechars:30 }}
+                            </p>
+                            <p class="card-text">
+                                Cuisine: {{ recipe.cuisine }}
+                            </p>
+                            <p class="card-text">
+                                Time: {{ recipe.total_coooking_time }} min.
+                            </p>
+                            <a href="{% url 'recipe details' recipe.id %}"
+                               class="btn btn-primary stretched-link">Details</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="{% url 'index' %}?page={{ page_obj.previous_page_number }}">Previous</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="True">Previous</a>
+                    </li>
+                {% endif %}
+                {% for i in page_obj.paginator.page_range %}
+                    {% if page_obj.number == i %}
+                        <li class="page-item active" aria-current="page">
+                            <span class="page-link">
+                                {{ i }}
+                                <span class="sr-only">(current)</span>
+                            </span>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="{% url 'index' %}?page={{ i }}">{{ i }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="{% url 'index' %}?page={{ page_obj.next_page_number }}">Next</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="True">Next</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
 {% endblock %}

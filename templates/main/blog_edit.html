@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block page_content %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'recipe.css' %}">
+    <form method="POST"
+          action="{% url 'edit blog' object.pk %}"
+          enctype="multipart/form-data">
+        {% csrf_token %}
+        {% if form.errors %}
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <div id="form_errors">
+                    {% for key, value in form.errors.items %}
+                        <strong>{{ key }}:{{ value }}</strong>
+                    {% endfor %}
+                </div>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endif %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Save Changes</button>
+        <button type="reset" class="btn btn-info">Reset</button>
+    </form>
+{% endblock  %}

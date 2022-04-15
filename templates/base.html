@@ -27,7 +27,7 @@
                         <a href="{% url 'dashboard recipes' %}">Recepies</a>
                     </li>
                     <li>
-                        <a href="#">Blogs</a>
+                        <a href="{% url 'dashboard blogs' %}">Blogs</a>
                     </li>
                     <li>
                         <a href="{% url 'contact' %}">Contact</a>
@@ -35,6 +35,11 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     {% if user.is_authenticated %}
+                        {% if user.is_staff or user.is_superuser %}
+                            <li>
+                                <a href="{% url 'create blog' %}"><b>Submit Blog</b></a>
+                            </li>
+                        {% endif %}
                         <li>
                             <a href="{% url 'create recipe' %}"><b>Submit Recipe</b></a>
                         </li>

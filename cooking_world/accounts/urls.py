@@ -31,4 +31,4 @@ urlpatterns = (
     ),
 )
 
-# import cooking_world.accounts.signals
+import cooking_world.accounts.signals

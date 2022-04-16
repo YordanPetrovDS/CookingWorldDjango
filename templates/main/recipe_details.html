@@ -10,9 +10,15 @@
                  width="400"
                  height="350"/>
         </h5>
-        <h5 class="w3-animate-left">
-            <b>Author:</b> <a href="{% url 'profile details' recipe.user_id %}">{{author.get_full_name}}</a>
-        </h5>
+        {% if author.first_name != "None" %}
+            <h5 class="w3-animate-left">
+                <b>Author:</b> <a href="{% url 'profile details' recipe.user_id %}">{{author.get_full_name}}</a>
+            </h5>
+        {% else %}
+            <h5 class="w3-animate-left">
+                <b>Author:</b> <a href="{% url 'profile details' recipe.user_id %}">{{author.email}}</a>
+            </h5>
+        {% endif %}
         <h5 class="w3-animate-left"><b>Title:</b> {{ recipe.title }}</h5>
         <h5 class="w3-animate-left"><b>Cuisine:</b> {{ recipe.cuisine }}</h5>
         <h5 class="w3-animate-left"><b>Meal Type:</b> {{ recipe.meal_type }}</h5>

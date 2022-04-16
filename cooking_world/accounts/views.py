@@ -4,15 +4,13 @@ from cooking_world.accounts.forms import (
     EditProfileForm,
     LoginUserForm,
 )
-from cooking_world.accounts.models import AppUser, Profile
+from cooking_world.accounts.models import Profile
 from cooking_world.common.view_mixins import RedirectToDashboard
+from cooking_world.main.models import Recipe
 from django.contrib.auth import login
-from django.contrib.auth import mixins as auth_mixin
 from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
 from django.views import generic as views
-
-from cooking_world.main.models import Recipe
 
 
 class RegisterUserView(RedirectToDashboard, views.CreateView):
@@ -80,7 +78,9 @@ class EditProfileView(views.UpdateView):
     template_name = "accounts/profile_edit.html"
 
     def get_success_url(self):
-        return reverse_lazy("profile details", kwargs={"pk": self.request.user.id})
+        return reverse_lazy(
+            "profile details", kwargs={"pk": self.request.user.id}
+        )
 
 
 class DeleteProfileView(views.DeleteView):

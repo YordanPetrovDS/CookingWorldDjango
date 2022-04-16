@@ -10,9 +10,15 @@
                  width="400"
                  height="350"/>
         </h5>
-        <h5 class="w3-animate-left">
-            <b>Author:</b> <a href="{% url 'profile details' blog.user_id %}">{{author.get_full_name}}</a>
-        </h5>
+        {% if author.first_name != "None" %}
+            <h5 class="w3-animate-left">
+                <b>Author:</b> <a href="{% url 'profile details' blog.user_id %}">{{author.get_full_name}}</a>
+            </h5>
+        {% else %}
+            <h5 class="w3-animate-left">
+                <b>Author:</b> <a href="{% url 'profile details' blog.user_id %}">{{author.email}}</a>
+            </h5>
+        {% endif %}
         <h5 class="w3-animate-left"><b>Date:</b> {{ blog.publication_date|date:"d.m.Y" }}</h5>
         <h5 class="w3-animate-left"><b>Title:</b> {{ blog.title }}</h5>
         <h5 class="w3-animate-left">

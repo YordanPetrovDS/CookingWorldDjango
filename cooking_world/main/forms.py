@@ -64,12 +64,12 @@ class EditRecipeForm(BootstrapFormMixin, forms.ModelForm):
         super().__init__(*args, **kwargs)
         self._init_bootstrap_form_controls()
 
-    def save(self, commit=True):
-        db_recipe = Recipe.objects.get(pk=self.instance.id)
-        if commit:
-            photo_path = join(settings.MEDIA_ROOT, str(db_recipe.photo))
-            os.remove(photo_path)
-        return super().save(commit)
+    # def save(self, commit=True):
+    #     db_recipe = Recipe.objects.get(pk=self.instance.id)
+    #     if commit:
+    #         photo_path = join(settings.MEDIA_ROOT, str(db_recipe.photo))
+    #         os.remove(photo_path)
+    #     return super().save(commit)
 
     class Meta:
         model = Recipe
@@ -113,12 +113,12 @@ class EditBlogForm(BootstrapFormMixin, forms.ModelForm):
         super().__init__(*args, **kwargs)
         self._init_bootstrap_form_controls()
 
-    def save(self, commit=True):
-        db_blog = Blog.objects.get(pk=self.instance.id)
-        if commit:
-            photo_path = join(settings.MEDIA_ROOT, str(db_blog.photo))
-            os.remove(photo_path)
-        return super().save(commit)
+    # def save(self, commit=True):
+    #     db_blog = Blog.objects.get(pk=self.instance.id)
+    #     if commit:
+    #         photo_path = join(settings.MEDIA_ROOT, str(db_blog.photo))
+    #         os.remove(photo_path)
+    #     return super().save(commit)
 
     class Meta:
         model = Blog
